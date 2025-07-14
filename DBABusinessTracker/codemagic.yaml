@@ -1,0 +1,42 @@
+workflows:
+  build_and_release:
+    name: Build Call Tracker+ App
+    max_build_duration: 60
+    environment:
+      flutter: stable
+      xcode: latest
+      vars:
+        APP_ID: "com.yourcompany.calltrackerplus"
+        BUNDLE_ID: "com.yourcompany.calltrackerplus"
+      groups:
+        - google_credentials
+        - app_store_credentials
+      android_signing:
+        - google_play
+      ios_signing:
+        - app_store
+    scripts:
+      - name: Install dependencies
+        script: flutter pub get
+
+      - name: Run tests
+        script: flutter test
+
+      - name: Build Android (.aab)
+        script: flutter build appbundle --release --build-name=1.0.0 --build-number=1
+
+      - name: Build iOS (.ipa)
+        script: flutter build ipa --release --no-codesign
+
+    artifacts:
+      - build/**/outputs/**/*.aab
+      - build/ios/ipa/*.ipa
+
+    publishing:
+      google_play:
+        credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
+        track: internal
+      app_store:
+        apple_id: $APP_STORE_APPLE_ID
+        app_specific_password: $APP_STORE_APP_PASSWORD
+        submit_to_testflight: true
