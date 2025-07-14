@@ -1,0 +1,16 @@
+
+name: call_tracker_plus
+description: Call Tracker+ with Monday.com integration
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.17.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  http: ^0.13.0
+  flutter_dotenv: ^5.0.2
+
+flutter:
+  uses-material-design: true
